@@ -94,6 +94,6 @@ jobs:
             echo "bye.txt is not bye"
             exit 1
           fi
-      - run:
+      - run: |
           mkdir -p ~/.cache/depcache && echo hello > ~/.cache/depcache/hello.txt
           mkdir -p ~/.cache2/depcache && echo bye > ~/.cache2/depcache/bye.txt
