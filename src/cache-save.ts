@@ -5,7 +5,7 @@ import * as github from '@actions/github'
 import { State } from './constants'
 
 export const cachePackages = async (
-  cachePath: string,
+  cachePaths: string[],
   token: string
 ): Promise<void> => {
   const state = core.getState(State.CacheMatchedKey)
@@ -31,7 +31,7 @@ export const cachePackages = async (
     })
   }
 
-  const cacheId = await cache.saveCache([cachePath], primaryKey)
+  const cacheId = await cache.saveCache(cachePaths, primaryKey)
   if (cacheId === -1) {
     return
   }

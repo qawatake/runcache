@@ -23,10 +23,9 @@ inputs:
     required: false
     default: 'false'
 
-# Define your outputs here.
-# outputs:
-#   time:
-#     description: 'Your output description here'
+outputs:
+  cache-hit:
+    description: 'Whether the cache was hit or not'
 
 runs:
   using: node20
