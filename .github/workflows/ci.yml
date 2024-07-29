@@ -84,7 +84,7 @@ jobs:
           skip-save: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: check cache
-        if: steps.test-action.outputs.cache-hit
+        if: ${{ steps.test-action.outputs.cache-hit == true }}
         run: |
           if [[ $(cat ~/.cache/depcache/hello.txt) != "hello" ]]; then
             echo "hello.txt is not hello"
