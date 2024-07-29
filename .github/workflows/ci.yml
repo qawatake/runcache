@@ -85,7 +85,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: echo ${{ steps.test-action.outputs.cache-hit }}
       - name: check cache
-        if: ${{ steps.test-action.outputs.cache-hit == true }}
+        if: ${{ steps.test-action.outputs.cache-hit }}
         # check content
         run: |
           if [[ $(cat ~/.cache/depcache/hello.txt) != "hello" ]]; then
@@ -97,7 +97,7 @@ jobs:
             exit 1
           fi
       - name: check cache2
-        if: false
+        if: steps.test-action.outputs.cache-hit
         # check content
         run: |
           if [[ $(cat ~/.cache/depcache/hello.txt) != "hello" ]]; then
