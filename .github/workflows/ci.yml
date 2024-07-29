@@ -81,7 +81,7 @@ jobs:
           path: |
             ~/.cache/
             ~/.cache2/
-          skip-save: ${{ github.ref != 'refs/heads/main' }}
+          skip-save: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: check cache
         if: ${{ steps.test-action.outputs.cache-hit }}
