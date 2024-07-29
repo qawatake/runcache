@@ -65868,6 +65868,7 @@ exports.restoreCache = restoreCache;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Outputs = exports.State = void 0;
 // copied from https://github.com/actions/setup-go/tree/v5.0.2/src
+/* eslint-disable no-shadow */
 var State;
 (function (State) {
     State["CachePrimaryKey"] = "CACHE_KEY";
@@ -65877,6 +65878,7 @@ var Outputs;
 (function (Outputs) {
     Outputs["CacheHit"] = "cache-hit";
 })(Outputs || (exports.Outputs = Outputs = {}));
+/* eslint-enable no-shadow */
 
 
 /***/ }),
