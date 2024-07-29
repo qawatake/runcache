@@ -1,24 +1,37 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'runcache'
+description: 'cache run results'
+author: 'qawatake'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
-branding:
-  icon: 'heart'
-  color: 'red'
+# branding:
+#   icon: 'heart'
+#   color: 'red'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  path:
+    description: 'Used to specify the path to the cache'
     required: true
-    default: '1000'
+  skip-save:
+    description: 'Used to specify whether to skip saving the cache'
+    required: true
+  github-token:
+    description: 'Used to delete cache'
+    required: true
+  save-on-failure:
+    description: 'Used to specify whether to save the cache on failure'
+    required: false
+    default: 'false'
 
 # Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+# outputs:
+#   time:
+#     description: 'Your output description here'
 
 runs:
   using: node20
-  main: dist/index.js
+  main: dist/main/index.js
+  post: dist/post/index.js
+  post-if:
+    '!github.event.inputs.skip-save && (success() ||
+    github.event.inputs.save-on-failure)'
