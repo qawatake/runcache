@@ -65821,7 +65821,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const crypto_1 = __importDefault(__nccwpck_require__(6113));
 const github = __importStar(__nccwpck_require__(5438));
 const constants_1 = __nccwpck_require__(581);
-const restoreCache = async (jobId, cachePath, token) => {
+const restoreCache = async (jobId, cachePaths, token) => {
     const oktokit = github.getOctokit(token);
     const { data: workflowRun } = await oktokit.rest.actions.getWorkflowRun({
         repo: github.context.repo.repo,
@@ -65838,14 +65838,17 @@ const restoreCache = async (jobId, cachePath, token) => {
         .replaceAll(',', '-');
     const platform = process.env.RUNNER_OS;
     const linuxVersion = process.env.RUNNER_OS === 'Linux' ? `${process.env.ImageOS}-` : '';
-    const hash = crypto_1.default.createHash('md5').update(cachePath).digest('hex');
+    const hash = crypto_1.default
+        .createHash('md5')
+        .update(cachePaths.join(','))
+        .digest('hex');
     // (workflow, job id, cache path)でactionの呼び出しを一意に特定できる。
     // cache pathが必要なのは、composite actionから同じactionを複数回呼び出した場合にはworkflow pathとjob idだけでは一意に特定できないため。
     // jobが同じなのにcache pathが同じだとそもそもエラーになるはず。
     const primaryKey = `runcache-${workflowPath}-${jobId}-${platform}-${linuxVersion}${hash}`;
     core.debug(`primary key is ${primaryKey}`);
     core.saveState(constants_1.State.CachePrimaryKey, primaryKey);
-    const cacheKey = await cache.restoreCache([cachePath], primaryKey);
+    const cacheKey = await cache.restoreCache(cachePaths, primaryKey);
     core.setOutput(constants_1.Outputs.CacheHit, Boolean(cacheKey));
     if (!cacheKey) {
         core.info(`Cache is not found`);
@@ -65916,13 +65919,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const cache_restore_1 = __nccwpck_require__(9517);
+const utils = __importStar(__nccwpck_require__(4427));
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function run() {
     try {
-        (0, cache_restore_1.restoreCache)(github.context.job, core.getInput('path'), core.getInput('github-token'));
+        (0, cache_restore_1.restoreCache)(github.context.job, utils.getInputAsArray('path'), core.getInput('github-token'));
         // Set outputs for other workflow steps to use
     }
     catch (error) {
@@ -65932,6 +65936,49 @@ async function run() {
     }
 }
 run();
+
+
+/***/ }),
+
+/***/ 4427:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getInputAsArray = getInputAsArray;
+const core = __importStar(__nccwpck_require__(2186));
+// reference: https://github.com/actions/cache/blob/0c45773b623bea8c8e75f6c82b208c3cf94ea4f9/src/utils/actionUtils.ts#L33C1-L42C2
+function getInputAsArray(name, options) {
+    return core
+        .getInput(name, options)
+        .split('\n')
+        .map(s => s.replace(/^!\s+/, '!').trim())
+        .filter(x => x !== '');
+}
 
 
 /***/ }),

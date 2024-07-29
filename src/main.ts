@@ -2,6 +2,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { restoreCache } from './cache-restore'
+import * as utils from './utils/action'
 
 /**
  * The main function for the action.
@@ -11,7 +12,7 @@ async function run(): Promise<void> {
   try {
     restoreCache(
       github.context.job,
-      core.getInput('path'),
+      utils.getInputAsArray('path'),
       core.getInput('github-token')
     )
     // Set outputs for other workflow steps to use

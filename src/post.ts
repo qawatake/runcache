@@ -1,6 +1,7 @@
 // some modifications were made to https://github.com/actions/setup-go/tree/v5.0.2/src
 import * as core from '@actions/core'
 import { cachePackages } from './cache-save'
+import * as utils from './utils/action'
 
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
@@ -15,7 +16,10 @@ process.on('uncaughtException', e => {
 // https://github.com/actions/cache/pull/1217
 async function run(earlyExit?: boolean): Promise<void> {
   try {
-    await cachePackages(core.getInput('path'), core.getInput('github-token'))
+    await cachePackages(
+      utils.getInputAsArray('path'),
+      core.getInput('github-token')
+    )
 
     if (earlyExit) {
       process.exit(0)

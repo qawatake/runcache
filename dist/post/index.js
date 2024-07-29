@@ -65817,7 +65817,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const cache = __importStar(__nccwpck_require__(7799));
 const github = __importStar(__nccwpck_require__(5438));
 const constants_1 = __nccwpck_require__(581);
-const cachePackages = async (cachePath, token) => {
+const cachePackages = async (cachePaths, token) => {
     const state = core.getState(constants_1.State.CacheMatchedKey);
     const primaryKey = core.getState(constants_1.State.CachePrimaryKey);
     const oktokit = github.getOctokit(token);
@@ -65834,7 +65834,7 @@ const cachePackages = async (cachePath, token) => {
             repo: github.context.repo.repo
         });
     }
-    const cacheId = await cache.saveCache([cachePath], primaryKey);
+    const cacheId = await cache.saveCache(cachePaths, primaryKey);
     if (cacheId === -1) {
         return;
     }
@@ -65900,6 +65900,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 // some modifications were made to https://github.com/actions/setup-go/tree/v5.0.2/src
 const core = __importStar(__nccwpck_require__(2186));
 const cache_save_1 = __nccwpck_require__(4553);
+const utils = __importStar(__nccwpck_require__(4427));
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
 // throw an uncaught exception.  Instead of failing this action, just warn.
@@ -65912,7 +65913,7 @@ process.on('uncaughtException', e => {
 // https://github.com/actions/cache/pull/1217
 async function run(earlyExit) {
     try {
-        await (0, cache_save_1.cachePackages)(core.getInput('path'), core.getInput('github-token'));
+        await (0, cache_save_1.cachePackages)(utils.getInputAsArray('path'), core.getInput('github-token'));
         if (earlyExit) {
             process.exit(0);
         }
@@ -65929,6 +65930,49 @@ async function run(earlyExit) {
     }
 }
 run(true);
+
+
+/***/ }),
+
+/***/ 4427:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getInputAsArray = getInputAsArray;
+const core = __importStar(__nccwpck_require__(2186));
+// reference: https://github.com/actions/cache/blob/0c45773b623bea8c8e75f6c82b208c3cf94ea4f9/src/utils/actionUtils.ts#L33C1-L42C2
+function getInputAsArray(name, options) {
+    return core
+        .getInput(name, options)
+        .split('\n')
+        .map(s => s.replace(/^!\s+/, '!').trim())
+        .filter(x => x !== '');
+}
 
 
 /***/ }),
