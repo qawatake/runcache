@@ -83,6 +83,7 @@ jobs:
             ~/.cache2/
           skip-save: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo ${{ steps.test-action.outputs.cache-hit }}
       - name: check cache
         if: ${{ steps.test-action.outputs.cache-hit }}
         # check content
