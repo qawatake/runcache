@@ -83,22 +83,8 @@ jobs:
             ~/.cache2/
           skip-save: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo ${{ steps.test-action.outputs.cache-hit }}
       - name: check cache
-        if: ${{ steps.test-action.outputs.cache-hit }}
-        # check content
-        run: |
-          if [[ $(cat ~/.cache/depcache/hello.txt) != "hello" ]]; then
-            echo "hello.txt is not hello"
-            exit 1
-          fi
-          if [[ $(cat ~/.cache2/depcache/bye.txt) != "bye" ]]; then
-            echo "bye.txt is not bye"
-            exit 1
-          fi
-      - name: check cache2
         if: steps.test-action.outputs.cache-hit
-        # check content
         run: |
           if [[ $(cat ~/.cache/depcache/hello.txt) != "hello" ]]; then
             echo "hello.txt is not hello"
