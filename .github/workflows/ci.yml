@@ -96,6 +96,18 @@ jobs:
             echo "bye.txt is not bye"
             exit 1
           fi
+      - name: check cache2
+        if: false
+        # check content
+        run: |
+          if [[ $(cat ~/.cache/depcache/hello.txt) != "hello" ]]; then
+            echo "hello.txt is not hello"
+            exit 1
+          fi
+          if [[ $(cat ~/.cache2/depcache/bye.txt) != "bye" ]]; then
+            echo "bye.txt is not bye"
+            exit 1
+          fi
       - run:
           mkdir -p ~/.cache/depcache && echo hello > ~/.cache/depcache/hello.txt
           mkdir -p ~/.cache2/depcache && echo bye > ~/.cache2/depcache/bye.txt
