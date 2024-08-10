@@ -65833,7 +65833,7 @@ const cachePackages = async (cachePaths, token) => {
     const primaryKey = core.getState(constants_1.State.CachePrimaryKey);
     const oktokit = github.getOctokit(token);
     if (!primaryKey) {
-        core.info('Primary key was not generated. Please check the log messages above for more errors or information');
+        core.info("Primary key was not generated. Please check the log messages above for more errors or information");
         return;
     }
     const cacheHit = primaryKey === state;
@@ -65842,7 +65842,7 @@ const cachePackages = async (cachePaths, token) => {
         await oktokit.rest.actions.deleteActionsCacheByKey({
             key: primaryKey,
             owner: github.context.repo.owner,
-            repo: github.context.repo.repo
+            repo: github.context.repo.repo,
         });
     }
     const cacheId = await cache.saveCache(cachePaths, primaryKey);
@@ -65915,8 +65915,8 @@ const utils = __importStar(__nccwpck_require__(4427));
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to
 // throw an uncaught exception.  Instead of failing this action, just warn.
-process.on('uncaughtException', e => {
-    const warningPrefix = '[warning]';
+process.on("uncaughtException", (e) => {
+    const warningPrefix = "[warning]";
     core.info(`${warningPrefix}${e.message}`);
 });
 // Added early exit to resolve issue with slow post action step:
@@ -65924,17 +65924,17 @@ process.on('uncaughtException', e => {
 // https://github.com/actions/cache/pull/1217
 async function run(earlyExit) {
     try {
-        await (0, cache_save_1.cachePackages)(utils.getInputAsArray('path'), core.getInput('github-token'));
+        await (0, cache_save_1.cachePackages)(utils.getInputAsArray("path"), core.getInput("github-token"));
         if (earlyExit) {
             process.exit(0);
         }
     }
     catch (error) {
-        let message = 'Unknown error!';
+        let message = "Unknown error!";
         if (error instanceof Error) {
             message = error.message;
         }
-        if (typeof error === 'string') {
+        if (typeof error === "string") {
             message = error;
         }
         core.warning(message);
@@ -65980,9 +65980,9 @@ const core = __importStar(__nccwpck_require__(2186));
 function getInputAsArray(name, options) {
     return core
         .getInput(name, options)
-        .split('\n')
-        .map(s => s.replace(/^!\s+/, '!').trim())
-        .filter(x => x !== '');
+        .split("\n")
+        .map((s) => s.replace(/^!\s+/, "!").trim())
+        .filter((x) => x !== "");
 }
 
 
