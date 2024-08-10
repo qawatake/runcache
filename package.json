@@ -72,6 +72,7 @@
     "@actions/glob": "^0.4.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.2.0",

@@ -1,7 +1,7 @@
 // some modifications were made to https://github.com/actions/setup-go/tree/v5.0.2/src
 import * as cache from '@actions/cache'
 import * as core from '@actions/core'
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import * as github from '@actions/github'
 
 import { State, Outputs } from './constants'
@@ -44,7 +44,7 @@ export const restoreCache = async (
   core.setOutput(Outputs.CacheHit, Boolean(cacheKey))
 
   if (!cacheKey) {
-    core.info(`Cache is not found`)
+    core.info('Cache is not found')
     core.setOutput(Outputs.CacheHit, false)
     return
   }
