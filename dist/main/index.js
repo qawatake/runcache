@@ -65829,7 +65829,7 @@ exports.restoreCache = void 0;
 // some modifications were made to https://github.com/actions/setup-go/tree/v5.0.2/src
 const cache = __importStar(__nccwpck_require__(7799));
 const core = __importStar(__nccwpck_require__(2186));
-const crypto_1 = __importDefault(__nccwpck_require__(6113));
+const node_crypto_1 = __importDefault(__nccwpck_require__(6005));
 const github = __importStar(__nccwpck_require__(5438));
 const constants_1 = __nccwpck_require__(581);
 const restoreCache = async (jobId, cachePaths, token) => {
@@ -65837,22 +65837,22 @@ const restoreCache = async (jobId, cachePaths, token) => {
     const { data: workflowRun } = await oktokit.rest.actions.getWorkflowRun({
         repo: github.context.repo.repo,
         owner: github.context.repo.owner,
-        run_id: github.context.runId
+        run_id: github.context.runId,
     });
     const { data: workflow } = await oktokit.rest.actions.getWorkflow({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
-        workflow_id: workflowRun.workflow_id
+        workflow_id: workflowRun.workflow_id,
     });
     const workflowPath = workflow.path
-        .replace(/^\.github\/workflows\//, '')
-        .replaceAll(',', '-');
+        .replace(/^\.github\/workflows\//, "")
+        .replaceAll(",", "-");
     const platform = process.env.RUNNER_OS;
-    const linuxVersion = process.env.RUNNER_OS === 'Linux' ? `${process.env.ImageOS}-` : '';
-    const hash = crypto_1.default
-        .createHash('md5')
-        .update(cachePaths.join(','))
-        .digest('hex');
+    const linuxVersion = process.env.RUNNER_OS === "Linux" ? `${process.env.ImageOS}-` : "";
+    const hash = node_crypto_1.default
+        .createHash("md5")
+        .update(cachePaths.join(","))
+        .digest("hex");
     // (workflow, job id, cache path)でactionの呼び出しを一意に特定できる。
     // cache pathが必要なのは、composite actionから同じactionを複数回呼び出した場合にはworkflow pathとjob idだけでは一意に特定できないため。
     // jobが同じなのにcache pathが同じだとそもそもエラーになるはず。
@@ -65862,7 +65862,7 @@ const restoreCache = async (jobId, cachePaths, token) => {
     const cacheKey = await cache.restoreCache(cachePaths, primaryKey);
     core.setOutput(constants_1.Outputs.CacheHit, Boolean(cacheKey));
     if (!cacheKey) {
-        core.info(`Cache is not found`);
+        core.info("Cache is not found");
         core.setOutput(constants_1.Outputs.CacheHit, false);
         return;
     }
@@ -65937,7 +65937,7 @@ const utils = __importStar(__nccwpck_require__(4427));
  */
 async function run() {
     try {
-        (0, cache_restore_1.restoreCache)(github.context.job, utils.getInputAsArray('path'), core.getInput('github-token'));
+        (0, cache_restore_1.restoreCache)(github.context.job, utils.getInputAsArray("path"), core.getInput("github-token"));
         // Set outputs for other workflow steps to use
     }
     catch (error) {
@@ -65986,9 +65986,9 @@ const core = __importStar(__nccwpck_require__(2186));
 function getInputAsArray(name, options) {
     return core
         .getInput(name, options)
-        .split('\n')
-        .map(s => s.replace(/^!\s+/, '!').trim())
-        .filter(x => x !== '');
+        .split("\n")
+        .map((s) => s.replace(/^!\s+/, "!").trim())
+        .filter((x) => x !== "");
 }
 
 
@@ -66095,6 +66095,14 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 6005:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:crypto");
 
 /***/ }),
 
