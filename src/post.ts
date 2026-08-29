@@ -1,7 +1,7 @@
 // some modifications were made to https://github.com/actions/setup-go/tree/v5.0.2/src
 import * as core from "@actions/core";
-import { cachePackages } from "./cache-save";
-import * as utils from "./utils/action";
+import { cachePackages } from "./cache-save.js";
+import * as utils from "./utils/action.js";
 
 // Catch and log any unhandled exceptions.  These exceptions can leak out of the uploadChunk method in
 // @actions/toolkit when a failed upload closes the file descriptor causing any in-process reads to

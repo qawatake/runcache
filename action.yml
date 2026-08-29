@@ -28,7 +28,7 @@ outputs:
     description: 'Whether the cache was hit or not'
 
 runs:
-  using: node20
+  using: node24
   main: dist/main/index.js
   post: dist/post/index.js
   post-if:
