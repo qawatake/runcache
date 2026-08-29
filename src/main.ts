@@ -1,8 +1,8 @@
 // some modifications were made to https://github.com/actions/setup-go/tree/v5.0.2/src
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import { restoreCache } from "./cache-restore";
-import * as utils from "./utils/action";
+import { restoreCache } from "./cache-restore.js";
+import * as utils from "./utils/action.js";
 
 /**
  * The main function for the action.

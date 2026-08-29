@@ -4,7 +4,7 @@ import * as core from "@actions/core";
 import crypto from "node:crypto";
 import * as github from "@actions/github";
 
-import { State, Outputs } from "./constants";
+import { State, Outputs } from "./constants.js";
 
 export const restoreCache = async (
 	jobId: string,
