@@ -38,3 +38,23 @@ updates:
         dependency-type: production
         update-types:
           - patch
+    ignore:
+      # TypeScript 7.0 has no stable compiler API. Reconsider from 7.1 onward.
+      - dependency-name: typescript
+        versions:
+          - 7.0.x
+      # Keep Node.js types aligned with the Node 24 GitHub Actions runtime.
+      - dependency-name: "@types/node"
+        update-types:
+          - "version-update:semver-major"
+      # Jest is not currently exercised by tests or CI. Reconsider its next major
+      # together with the test setup, or remove the unused toolchain.
+      - dependency-name: jest
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "@jest/globals"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "@types/jest"
+        update-types:
+          - "version-update:semver-major"
