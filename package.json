@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.11",
-    "@jest/globals": "^29.7.0",
+    "@jest/globals": "^30.5.1",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
