@@ -7,6 +7,11 @@ on:
   push:
     branches:
       - main
+  # 週次で main を検査する。commit がない期間でも `npm audit` が新しい advisory を拾えるようにするため
+  # (Dependabot は親 package が exact pin する transitive 依存の advisory を PR にできないことがある)。
+  # 土曜 03:00 JST = 金曜 18:00 UTC。Dependabot (土曜 03:00 JST) と同じタイミングにそろえる。
+  schedule:
+    - cron: "0 18 * * 5"
 
 permissions:
   contents: read
@@ -19,11 +24,11 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node.js
         id: setup-node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .node-version
           cache: npm
@@ -31,6 +36,16 @@ jobs:
       - name: Install Dependencies
         id: npm-ci
         run: npm ci
+
+      # 全 action が commit SHA に pin されているか (tag 参照を新しく足すと落ちる)
+      - name: Check actions are pinned
+        id: check-actions-pinned
+        run: node scripts/check-actions-pinned.mjs
+
+      # 既知脆弱性は high 以上で止める
+      - name: Audit
+        id: npm-audit
+        run: npm audit --audit-level=high
 
       - name: Format && Lint
         id: npm-check
@@ -50,7 +65,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Test Local Action
         id: test-action
         uses: ./
@@ -69,7 +84,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Test Local Action
         id: test-action
         uses: ./
