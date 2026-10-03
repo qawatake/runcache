@@ -25,44 +25,12 @@
   },
   "scripts": {
     "bundle": "npm run check && npm run package",
-    "ci-test": "npx jest",
-    "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
     "package": "rm -rf dist && npx rollup --config rollup.config.js",
     "package:watch": "npm run package -- --watch",
-    "test": "npx jest",
     "check": "npx @biomejs/biome format --write ./src",
-    "all": "npm run check && npm run test && npm run coverage && npm run package"
+    "all": "npm run check && npm run package"
   },
   "license": "MIT",
-  "jest": {
-    "preset": "ts-jest",
-    "verbose": true,
-    "clearMocks": true,
-    "testEnvironment": "node",
-    "moduleFileExtensions": [
-      "js",
-      "ts"
-    ],
-    "testMatch": [
-      "**/*.test.ts"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/dist/"
-    ],
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "coverageReporters": [
-      "json-summary",
-      "text",
-      "lcov"
-    ],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "./src/**"
-    ]
-  },
   "dependencies": {
     "@actions/cache": "6.2.0",
     "@actions/core": "3.0.1",
@@ -70,17 +38,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
-    "@jest/globals": "29.7.0",
     "@rollup/plugin-commonjs": "29.0.3",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-typescript": "12.3.0",
-    "@types/jest": "29.5.13",
     "@types/node": "24.13.5",
-    "jest": "29.7.0",
-    "make-coverage-badge": "1.2.0",
     "rollup": "4.63.3",
-    "ts-jest": "29.4.12",
     "tslib": "2.8.1",
     "typescript": "6.0.3"
   },

@@ -59,14 +59,3 @@ updates:
       - dependency-name: "@types/node"
         update-types:
           - "version-update:semver-major"
-      # Jest is not currently exercised by tests or CI. Reconsider its next major
-      # together with the test setup, or remove the unused toolchain.
-      - dependency-name: jest
-        update-types:
-          - "version-update:semver-major"
-      - dependency-name: "@jest/globals"
-        update-types:
-          - "version-update:semver-major"
-      - dependency-name: "@types/jest"
-        update-types:
-          - "version-update:semver-major"
